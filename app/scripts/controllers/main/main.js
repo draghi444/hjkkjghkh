@@ -13,7 +13,6 @@ angular.module('ChessMasterProApp')
     .controller('MainCtrl', ["$scope", "$firebaseObject", "$firebaseArray", "chessRef", "chessFunctions",
         function ($scope, $firebaseObject, $firebaseArray, chessRef, chessFunctions) {
 
-            var flag = false;
             var Chess = {};
             var canvas = $("#canvas0").get(0);
 
@@ -147,17 +146,22 @@ angular.module('ChessMasterProApp')
                     newBoard.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
                 } else {
                     if (activeClick) {
-                        activeClick = false;
-                        Chess.clicks[attackPosY][attackPosX] = "0";
-                        newBoard.board[attackPosY][attackPosX] = " ";
-                        newBoard.board[yClick][xClick] = attackPiece;
-                        newBoard.writeToFirebase(chessRef);
-                        attackPiece = null;
-                        attackPosX = null;
-                        attackPosY = null;
+
+                        var isAllowed = chessFunctions.moveAllowed(attackPiece, attackPosX, attackPosY, xClick, yClick, newBoard.board);
+                        if (isAllowed) {
+                            activeClick = false;
+                            Chess.clicks[attackPosY][attackPosX] = "0";
+                            newBoard.board[attackPosY][attackPosX] = " ";
+                            newBoard.board[yClick][xClick] = attackPiece;
+                            newBoard.writeToFirebase(chessRef);
+                            attackPiece = null;
+                            attackPosX = null;
+                            attackPosY = null;
+                        }
                     } else {
                         if (chessFunctions.getBoardClickPosition(x, y, newBoard.board) !== " ") {
                             activeClick = true;
+
                             Chess.clicks[yClick][xClick] = "1";
                             attackPiece = chessFunctions.getBoardClickPosition(x, y, newBoard.board);
                             attackPosX = xClick;
