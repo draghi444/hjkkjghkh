@@ -2,6 +2,6 @@
 
 
 angular.module('ChessMasterProApp')
-  .controller('AboutCtrl', function ($scope) {
+  .controller('LoginCtrl', function ($scope) {
   
   });

@@ -10,27 +10,10 @@ angular.module('ChessMasterProApp')
             return chessRef;
   }
 ])
-    .controller('MainCtrl', ["$scope", "$firebaseObject", "$firebaseArray", "chessRef", "chessFunctions", 
+    .controller('MainCtrl', ["$scope", "$firebaseObject", "$firebaseArray", "chessRef", "chessFunctions",
         function ($scope, $firebaseObject, $firebaseArray, chessRef, chessFunctions) {
 
-            //doua functii de pus in servicii
-            /*
-            function draw_image(context, x, y, image) {
-                var base_image = new Image();
-                base_image.src = image;
-                base_image.onload = function () {
-                    context.drawImage(base_image, x, y);
-                }
-            }
-
-            function getBoardClickPosition(x, y, BOARD) {
-                var xPos = x / 70;
-                var yPos = y / 70;
-                return BOARD[yPos][xPos];
-            }
-
-*/
-
+            var flag = false;
             var Chess = {};
             var canvas = $("#canvas0").get(0);
 
@@ -102,7 +85,7 @@ angular.module('ChessMasterProApp')
                         this.context.strokeRect(left, top, Chess.BLOCK_SIZE_PIXELS, Chess.BLOCK_SIZE_PIXELS);
                         this.context.font = "30px Arial";
                         this.context.fillStyle = colorValue == 'grey' ? 'white' : 'grey';
-                       // this.context.fillText(this.board[y][x], (x * Chess.BLOCK_SIZE_PIXELS) + 10, ((y + 1) * Chess.BLOCK_SIZE_PIXELS) - 25);
+                        // this.context.fillText(this.board[y][x], (x * Chess.BLOCK_SIZE_PIXELS) + 10, ((y + 1) * Chess.BLOCK_SIZE_PIXELS) - 25);
                         var xx = (x * Chess.BLOCK_SIZE_PIXELS);
                         var yy = ((y + 1) * Chess.BLOCK_SIZE_PIXELS) - 70;
                         var image;
