@@ -5,13 +5,48 @@ angular.module('ChessMasterProApp')
     .factory("chessRef", ["$firebaseArray",
   function ($firebaseArray) {
 
-            var chessRef = new Firebase('https://burning-heat-7639.firebaseio.com/');
+            var chessRef = new Firebase('https://burning-heat-7639.firebaseio.com/board');
             // var chessController = new Chess.Controller(chessRef);
             return chessRef;
   }
 ])
-    .controller('MainCtrl', ["$scope", "$firebaseObject", "$firebaseArray", "chessRef", "chessFunctions",
-        function ($scope, $firebaseObject, $firebaseArray, chessRef, chessFunctions) {
+    .controller('MainCtrl', ["$scope", "$firebaseObject", "$firebaseArray", "chessRef", "chessFunctions", "$timeout",
+        function ($scope, $firebaseObject, $firebaseArray, chessRef, chessFunctions, $timeout) {
+
+            var chessRefForAuth = new Firebase('https://burning-heat-7639.firebaseio.com/');
+            var authData = chessRefForAuth.getAuth();
+            $scope.authData = authData;
+            if (authData) {
+                console.log("User " + authData.uid + " is logged in with " + authData.provider);
+            } else {
+                console.log("User is logged out");
+            }
+
+            //actions/////
+            $scope.logOut = function () {
+                var uid = authData.uid;
+                var deleteUserRef = new Firebase('https://burning-heat-7639.firebaseio.com/users/' + uid);
+                deleteUserRef.set({
+                    uid: null
+                });
+                chessRefForAuth.unauth();
+            }
+
+            var turn;
+            $scope.newGame = function () {
+                newBoard.board = Chess.SBOARD;
+                newBoard.writeToFirebase(chessRef);
+
+                var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/turn');
+                turn = "w";
+                $scope.turn = turn;
+                turnRef.set(turn);
+                turnRef.once('value', function (snapshot) {
+                    turn = snapshot.val();
+                });
+            }
+            /////////////
+
 
             var Chess = {};
             var canvas = $("#canvas0").get(0);
@@ -29,26 +64,38 @@ angular.module('ChessMasterProApp')
                 Chess.clicks[i] = [];
             }
 
-            Chess.BOARD = [];
-            Chess.BOARD[0] = ["wlt", "wlc", "wln", "wrm", "wrf", "wrn", "wrc", "wrt"];
-            Chess.BOARD[1] = ["wp1", "wp2", "wp3", "wp4", "wp5", "wp6", "wp7", "wp8"];
-            Chess.BOARD[2] = [" ", " ", " ", " ", " ", " ", " ", " "];
-            Chess.BOARD[3] = [" ", " ", " ", " ", " ", " ", " ", " "];
-            Chess.BOARD[4] = [" ", " ", " ", " ", " ", " ", " ", " "];
-            Chess.BOARD[5] = [" ", " ", " ", " ", " ", " ", " ", " "];
-            Chess.BOARD[6] = ["bp1", "bp2", "bp3", "bp4", "bp5", "bp6", "bp7", "bp8"];
-            Chess.BOARD[7] = ["blt", "blc", "bln", "brm", "brf", "brn", "brc", "brt"];
+            Chess.SBOARD = [];
+
+            Chess.SBOARD[0] = ["wlt", "wlc", "wln", "wrm", "wrf", "wrn", "wrc", "wrt"];
+            Chess.SBOARD[1] = ["wp1", "wp2", "wp3", "wp4", "wp5", "wp6", "wp7", "wp8"];
+            Chess.SBOARD[2] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.SBOARD[3] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.SBOARD[4] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.SBOARD[5] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.SBOARD[6] = ["bp1", "bp2", "bp3", "bp4", "bp5", "bp6", "bp7", "bp8"];
+            Chess.SBOARD[7] = ["blt", "blc", "bln", "brm", "brf", "brn", "brc", "brt"];
+
+            Chess.EBOARD = [];
+            Chess.EBOARD[0] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.EBOARD[1] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.EBOARD[2] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.EBOARD[3] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.EBOARD[4] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.EBOARD[5] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.EBOARD[6] = [" ", " ", " ", " ", " ", " ", " ", " "];
+            Chess.EBOARD[7] = [" ", " ", " ", " ", " ", " ", " ", " "];
 
 
             Chess.Board = function (BOARD, canvas) {
-                this.board = BOARD;
+                // this.board = BOARD;
                 this.context = canvas.getContext('2d');
 
                 var self = this;
-                self.writeToFirebase(chessRef);
-                self.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
+                // self.writeToFirebase(chessRef);
+                // self.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
 
                 chessRef.on('value', function (snap) {
+                    console.log('value');
                     self.board = snap.val().board;
                     console.log(self.board[0]);
                     console.log(self.board[1]);
@@ -60,12 +107,13 @@ angular.module('ChessMasterProApp')
                     console.log(self.board[7]);
                     console.log('--------------------------------------------------------------');
                     self.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
+
                 });
             };
 
             Chess.Board.prototype.writeToFirebase = function (chessRef) {
                 chessRef.set({
-                    board: this.board,
+                    board: this.board
                 });
             };
             Chess.Board.prototype.draw = function (a, b, c, d) {
@@ -118,23 +166,53 @@ angular.module('ChessMasterProApp')
             }
 
             ///Main///
-            var newBoard = new Chess.Board(Chess.BOARD, canvas);
-            newBoard.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
-            canvas.addEventListener('click', handleClick);
 
+            var newBoard = new Chess.Board(Chess.EBOARD, canvas);
+            // newBoard.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
+            canvas.addEventListener('click', handleClick);
 
             var activeClick = false;
             var attackPiece;
             var attackPosX;
             var attackPosY;
+            var color;
+
+            var ColorRef = new Firebase('https://burning-heat-7639.firebaseio.com/users/' + authData.uid);
+            ColorRef.once('value', function (snapshot) {
+                color = snapshot.val().color;
+                $scope.color = color;
+                $scope.$apply();
+
+            });
+
+            var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/turn');
+            turnRef.on('value', function (snapshot) {
+                turn = snapshot.val();
+                $scope.turn = turn;
+                $scope.$apply();
+            });
 
             function handleClick(e) {
+
+                //var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/turn');
+                turnRef.once('value', function (snapshot) {
+                    turn = snapshot.val();
+                    $scope.turn = turn;
+                    $scope.$apply();
+                });
+
+                if (authData) {
+                    console.log("User " + authData.uid + " is logged in with " + authData.provider);
+                } else {
+                    console.log("User is logged out");
+                }
 
                 var c = canvas.getContext("2d");
                 var x = Math.floor(e.offsetX / 70) * 70;
                 var y = Math.floor(e.offsetY / 70) * 70;
                 var xClick = x / Chess.BLOCK_SIZE_PIXELS;
                 var yClick = y / Chess.BLOCK_SIZE_PIXELS;
+                var textPiece = newBoard.board[yClick][xClick];
 
                 if (Chess.clicks[yClick][xClick] == "1") {
                     Chess.clicks[yClick][xClick] = "0";
@@ -157,22 +235,33 @@ angular.module('ChessMasterProApp')
                             attackPiece = null;
                             attackPosX = null;
                             attackPosY = null;
+                            if (turn == "w") {
+                                turn = "b";
+                            } else {
+                                turn = "w";
+                            }
+                            turnRef.set(
+                                turn
+                            );
+
                         }
                     } else {
                         if (chessFunctions.getBoardClickPosition(x, y, newBoard.board) !== " ") {
-                            activeClick = true;
-
-                            Chess.clicks[yClick][xClick] = "1";
-                            attackPiece = chessFunctions.getBoardClickPosition(x, y, newBoard.board);
-                            attackPosX = xClick;
-                            attackPosY = yClick;
-                            c.globalAlpha = 0.2;
-                            c.fillStyle = "blue";
-                            c.fillRect(x, y, 70, 70);
-                            c.stroke();
+                            if (String(textPiece)[0] == String(color)[0] && turn == String(color)[0]) {
+                                activeClick = true;
+                                Chess.clicks[yClick][xClick] = "1";
+                                attackPiece = chessFunctions.getBoardClickPosition(x, y, newBoard.board);
+                                attackPosX = xClick;
+                                attackPosY = yClick;
+                                c.globalAlpha = 0.2;
+                                c.fillStyle = "blue";
+                                c.fillRect(x, y, 70, 70);
+                                c.stroke();
+                            }
                         }
                     }
                 }
+
 
                 console.log('mutare:[' + xClick + '][' + yClick + '] click: ' + Chess.clicks[yClick][xClick] + ' attack-piece:' + attackPiece + ' attX:' + attackPosX + ' attY:' + attackPosY + '  piesa:' + chessFunctions.getBoardClickPosition(x, y, newBoard.board));
             }

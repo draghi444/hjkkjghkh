@@ -1,9 +1,24 @@
-<div >
+<div>
 
+    
+    <div>  
+        <a href="#/" ng-click="logOut()">Logout</a> 
+        <a> | </a>
+        <a href ng-click="newGame()">New game</a>
+        <a> | </a>
+        <a>You are {{color}}</a>
+        <a> | </a>
+        <a>Player to move:</a>
+        <input type="text" style="width:40px" ng-value="'white'" readonly disabled ng-if="turn=='w'"> </input>
+        <input type="text" style="width:40px" ng-value="'black'" readonly disabled ng-if="turn=='b'"> </input>
+        
+    </div>
+    <BR>
     <div>
         <canvas id="canvas0" width="560" height="560" color="red" style="background-color: #e5e5e5"></canvas>
     </div>
-
+    
+    
 </div>
 
 

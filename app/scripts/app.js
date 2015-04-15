@@ -9,16 +9,16 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'firebase', 
+    'firebase',
     'chessServices'
   ])
     .config(function ($routeProvider) {
         $routeProvider
-            .when('/', {
+            .when('/main', {
                 templateUrl: 'views/main/main.html',
                 controller: 'MainCtrl'
             })
-            .when('/login', {
+            .when('/', {
                 templateUrl: 'views/login/login.html',
                 controller: 'LoginCtrl'
             })
