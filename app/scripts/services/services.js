@@ -13,9 +13,13 @@ angular.module('chessServices').factory('chessFunctions', ["$http", "$q",
             }
         }
 
-        function getBoardClickPosition(x, y, BOARD) {
-            var xPos = x / 70;
-            var yPos = y / 70;
+        function getBoardClickPosition(x, y, BOARD, l) {
+            var xPos = x / l;
+            var yPos = y / l;
+            console.log('services:');
+            console.log(l);
+            console.log(x);
+            console.log(y);
             return BOARD[yPos][xPos];
         }
 
@@ -93,8 +97,8 @@ angular.module('chessServices').factory('chessFunctions', ["$http", "$q",
                 return draw_image(context, x, y, image);
             },
 
-            getBoardClickPosition: function (x, y, BOARD) {
-                return getBoardClickPosition(x, y, BOARD);
+            getBoardClickPosition: function (x, y, BOARD, l) {
+                return getBoardClickPosition(x, y, BOARD, l);
             },
 
             moveAllowed: function (attackPiece, attackPosX, attackPosY, xClick, yClick, BOARD) {
