@@ -14,7 +14,7 @@ angular
   ])
     .config(function ($routeProvider) {
         $routeProvider
-            .when('/main', {
+            .when('/main/:roomid', {
                 templateUrl: 'views/main/main.html',
                 controller: 'MainCtrl'
             })
@@ -22,7 +22,9 @@ angular
                 templateUrl: 'views/login/login.html',
                 controller: 'LoginCtrl'
             })
-            .otherwise({
-                redirectTo: '/'
-            });
+            .when('/rooms', {
+                templateUrl: 'views/rooms/rooms.html',
+                controller: 'RoomsCtrl'
+            })
+            
     });

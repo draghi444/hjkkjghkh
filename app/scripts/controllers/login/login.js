@@ -4,7 +4,15 @@
 angular.module('ChessMasterProApp')
     .controller('LoginCtrl', ["$scope", "$rootScope", "$route", "$routeParams", "$location", "$firebaseObject",
         function ($scope, $rootScope, $route, $routeParams, $location, $firebaseObject) {
-
+            
+jQuery(document).ready(function () {
+                    Metronic.init(); // init metronic core componets
+                    Layout.init(); // init layout
+                    Demo.init(); // init demo(theme settings page)
+                    // Index.init(); // init index page
+                });
+            
+            
             var credentials = $scope.credentials = {
                 username: "",
                 password: ""
@@ -16,21 +24,20 @@ angular.module('ChessMasterProApp')
             $scope.$routeParams = $routeParams;
 
 
-            var ref = new Firebase('https://burning-heat-7639.firebaseio.com/');
+            var ref = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/room1/');
 
             var numberUsersLogged;
             var UsersLogged;
 
             var UsersRef = new Firebase('https://burning-heat-7639.firebaseio.com/users/');
-            UsersRef.once('value', function (snapshot) {
+            ref.child('users').once('value', function (snapshot) {
                 numberUsersLogged = snapshot.numChildren();
+                console.log('children:' + numberUsersLogged);
                 UsersLogged = snapshot.val();
             });
 
 
             $scope.logIn = function () {
-                if (numberUsersLogged < 2) {
-                    console.log(numberUsersLogged);
                     ref.authWithPassword({
                         email: $scope.credentials.username,
                         password: $scope.credentials.password
@@ -39,7 +46,7 @@ angular.module('ChessMasterProApp')
                             console.log("Login Failed!", error);
                         } else {
                             console.log("Authenticated successfully with payload:", authData);
-                            $location.path("/main");
+                            $location.path("/rooms");
 
                             if (numberUsersLogged < 1) {
                                 color = "black";
@@ -55,9 +62,7 @@ angular.module('ChessMasterProApp')
                             $scope.$apply();
                         }
                     });
-                } else {
-                    alert('Game already in progress!');
-                }
+
             }
 
   }]);

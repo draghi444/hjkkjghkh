@@ -1,27 +1,120 @@
-<div class="bnp_form col-lg-5 col-lg-offset-3 ">
-
-    <label for="user" class="col-lg-6" style="text-align: right">Username</label>
-    <div class="col-lg-6">
-        <input type="text" class="col-lg-16" name="username" ng-model="credentials.username">
+<!-- BEGIN HEADER -->
+<div class="page-header" style="width:100%">
+    <!-- BEGIN HEADER TOP -->
+    <div class="page-header-top">
+        <div class="container">
+            <!-- BEGIN LOGO -->
+            <div class="page-logo">
+                <a href="index.html">
+                    <img src="../../assets/admin/layout3/img/black-chess-icon.png" alt="logo" class="logo-default">     
+                </a>
+            </div>
+        </div>
     </div>
+    <!-- END HEADER TOP -->
+    <!-- BEGIN HEADER MENU -->
+    <div class="page-header-menu">
+        <div class="container">
 
+            <!-- BEGIN MEGA MENU -->
+            <!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
+            <!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
+            <div class="hor-menu ">
+                <ul class="nav navbar-nav">
 
-    <label for="pass" class="col-lg-6" style="text-align: right" style="margin-top:2px">Password</label>
-    <div class="col-lg-6" style="margin-top:2px">
-        <input type="password" class="col-lg-16" name="password" id="password" ng-model="credentials.password">
+                </ul>
+            </div>
+            <!-- END MEGA MENU -->
+        </div>
     </div>
-
-    <div class="col-lg-6 col-lg-offset-6" style="margin-top:10px">      
-    <a href ng-click="logIn()">Log in</a>
-
-    </div>
-
-    <BR>
-    <BR>
-    <BR>
-    <BR>
-    <BR>
-    <BR>
-    <BR>
-
+    <!-- END HEADER MENU -->
 </div>
+<!-- END HEADER -->
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN PAGE HEAD -->
+    <div class="page-head">
+        <div class="container">
+            <!-- BEGIN PAGE TITLE -->
+
+            <!-- END PAGE TITLE -->
+            <!-- BEGIN PAGE TOOLBAR -->
+            <div class="page-toolbar">
+            </div>
+            <!-- END PAGE TOOLBAR -->
+        </div>
+    </div>
+    <!-- END PAGE HEAD -->
+    <!-- BEGIN PAGE CONTENT -->
+    <div class="page-content">
+        <div class="container">
+            <!-- BEGIN PAGE BREADCRUMB -->
+            <!-- END PAGE BREADCRUMB -->
+            <!-- BEGIN PAGE CONTENT INNER -->
+            <div class="row margin-top-10">
+                <div class="col-md-6 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption caption-md">
+                                <i class="icon-bar-chart theme-font hide"></i>
+                                <span class="caption-subject theme-font bold uppercase">LOG IN</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="container">
+
+
+
+                                <div class="row">
+                                    <label for="user" class="col-lg-1">Username</label>
+                                    <div class="col-lg-1">
+                                        <input type="text" name="username" ng-model="credentials.username">
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top:3px">
+                                    <label for="pass" class="col-lg-1">Password</label>
+                                    <div class="col-lg-1">
+                                        <input type="password" name="password" id="password" ng-model="credentials.password">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-1 col-lg-offset-1">
+                                        <a href ng-click="logIn()">Log in</a>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT INNER -->
+        </div>
+    </div>
+    <!-- END PAGE CONTENT -->
+</div>
+<!-- END PAGE CONTAINER -->
+<!-- BEGIN FOOTER -->
+<div class="page-footer">
+    <div class="container">
+        2014 &copy; Metronic. All Rights Reserved.
+    </div>
+</div>
+<div class="scroll-to-top">
+    <i class="icon-arrow-up"></i>
+</div>
+
+
+
+
+
+
+

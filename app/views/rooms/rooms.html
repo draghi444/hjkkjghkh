@@ -1,0 +1,136 @@
+<!-- BEGIN HEADER -->
+<div class="page-header" style="width:100%">
+    <!-- BEGIN HEADER TOP -->
+    <div class="page-header-top">
+        <div class="container">
+            <!-- BEGIN LOGO -->
+            <div class="page-logo">
+                <a href="index.html">
+                    <img src="../../assets/admin/layout3/img/black-chess-icon.png" alt="logo" class="logo-default">     
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- END HEADER TOP -->
+    <!-- BEGIN HEADER MENU -->
+    <div class="page-header-menu">
+        <div class="container">
+
+            <!-- BEGIN MEGA MENU -->
+            <!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
+            <!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
+            <div class="hor-menu ">
+                <ul class="nav navbar-nav">
+
+                </ul>
+            </div>
+            <!-- END MEGA MENU -->
+        </div>
+    </div>
+    <!-- END HEADER MENU -->
+</div>
+<!-- END HEADER -->
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN PAGE HEAD -->
+    <div class="page-head">
+        <div class="container">
+            <!-- BEGIN PAGE TITLE -->
+
+            <!-- END PAGE TITLE -->
+            <!-- BEGIN PAGE TOOLBAR -->
+            <div class="page-toolbar">
+            </div>
+            <!-- END PAGE TOOLBAR -->
+        </div>
+    </div>
+    <!-- END PAGE HEAD -->
+    <!-- BEGIN PAGE CONTENT -->
+    <div class="page-content">
+        <div class="container">
+            <!-- BEGIN PAGE BREADCRUMB -->
+            <!-- END PAGE BREADCRUMB -->
+            <!-- BEGIN PAGE CONTENT INNER -->
+            <div class="row margin-top-10">
+                <div class="col-md-6 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption caption-md">
+                                <i class="icon-bar-chart theme-font hide"></i>
+                                <span class="caption-subject theme-font bold uppercase">Chess Rooms</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+
+                            <div class="table-scrollable table-scrollable-borderless">
+                                <table class="table table-hover table-light">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th colspan="2">
+                                                Name
+                                            </th>
+                                            <th>
+                                                Nr players
+                                            </th>
+                                            <th>
+                                                Players
+                                            </th>
+                                            <th>
+                                                
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-repeat="r in rooms">
+                                        <tr>
+                                            <td class="fit">
+                                                <img class="user-pic" src="../../assets/admin/layout3/img/avatar4.jpg">
+                                            </td>
+                                            <td>
+                                                <p class="primary-link">{{r.name}}</p>
+                                            </td>
+                                            <td>
+                                                <p class="primary-link">{{r.number}}</p>
+                                            </td>
+                                            <td>
+                                                <div ng-repeat="u in r.users">
+                                                <p>{{u.name}}</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a ng-if="r.number < 2" href="{{'#/main/' + r.name}}"  ng-click="joinIn(r.name)" class="primary-link">Join</a>
+                                                <a ng-if="r.number == 2" href="javascript:;" class="primary-link">Watch</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT INNER -->
+        </div>
+    </div>
+    <!-- END PAGE CONTENT -->
+</div>
+<!-- END PAGE CONTAINER -->
+<!-- BEGIN FOOTER -->
+<div class="page-footer">
+    <div class="container">
+        2014 &copy; Metronic. All Rights Reserved.
+    </div>
+</div>
+<div class="scroll-to-top">
+    <i class="icon-arrow-up"></i>
+</div>
+
+
+
+
+
+
+

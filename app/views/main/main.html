@@ -1,26 +1,174 @@
-<div>
+<!-- BEGIN HEADER -->
+<div class="page-header" style="width:100%">
+    <!-- BEGIN HEADER TOP -->
+    <div class="page-header-top">
+        <div class="container">
+            <!-- BEGIN LOGO -->
+            <div class="page-logo">
+                <a href="index.html">
+                    <img src="../../assets/admin/layout3/img/black-chess-icon.png" alt="logo" class="logo-default">     
+                </a>
+            </div>
+            <!-- END LOGO -->
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a href="javascript:;" class="menu-toggler"></a>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
 
 
-    <div>
-        <a href="#/" ng-click="logOut()">Logout</a> 
-        <a> | </a>
-        <a href ng-click="newGame()">New game</a>
-        <a> | </a>
-        <a>You are {{color}}</a>
-        <a> | </a>
-        <a>Player to move:</a>
-        <input type="text" style="width:40px" ng-value="'white'" readonly disabled ng-if="turn=='w'"></input>
-        <input type="text" style="width:40px" ng-value="'black'" readonly disabled ng-if="turn=='b'"></input>
 
+
+                    <!-- BEGIN USER LOGIN DROPDOWN -->
+                    <li class="dropdown dropdown-user dropdown-dark">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <img alt="" class="img-circle" src="../assets/admin/layout3/img/avatar9.jpg">
+                            <span class="username username-hide-mobile">Nick</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li class="divider">
+                            </li>
+                            <li>
+                                <a href="views/main/main.html">
+                                    <i class="icon-lock"></i> Lock Screen</a>
+                            </li>
+                            <li>
+                                <a href="views/login/login.html">
+                                    <i class="icon-key"></i> Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                </ul>
+            </div>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
     </div>
-    <BR>
-    <div max-width="560" max-height="560">
-        <canvas id="canvas0" width="560" height="560" color="red" style="background-color: #e5e5e5"></canvas>
+    <!-- END HEADER TOP -->
+    <!-- BEGIN HEADER MENU -->
+    <div class="page-header-menu">
+        <div class="container">
 
+            <!-- BEGIN MEGA MENU -->
+            <!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
+            <!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
+            <div class="hor-menu ">
+                <ul class="nav navbar-nav">
+                    
+                </ul>
+            </div>
+            <!-- END MEGA MENU -->
+        </div>
     </div>
-
-
+    <!-- END HEADER MENU -->
 </div>
+<!-- END HEADER -->
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN PAGE HEAD -->
+    <div class="page-head">
+        <div class="container">
+            <!-- BEGIN PAGE TITLE -->
+
+            <!-- END PAGE TITLE -->
+            <!-- BEGIN PAGE TOOLBAR -->
+            <div class="page-toolbar">
+            </div>
+            <!-- END PAGE TOOLBAR -->
+        </div>
+    </div>
+    <!-- END PAGE HEAD -->
+    <!-- BEGIN PAGE CONTENT -->
+    <div class="page-content">
+        <div class="container">
+            <!-- BEGIN PAGE BREADCRUMB -->
+            <!-- END PAGE BREADCRUMB -->
+            <!-- BEGIN PAGE CONTENT INNER -->
+            <div class="row margin-top-10">
+                <div class="col-md-5 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption caption-md">
+                                <i class="icon-bar-chart theme-font hide"></i>
+                                <span class="caption-subject theme-font bold uppercase">Game board</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div style="max-width:400px" >
+
+
+                                <canvas id="canvas0" width="400" height="400" color="red" style="background-color: #e5e5e5;"></canvas>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption caption-md">
+                                <i class="icon-bar-chart theme-font hide"></i>
+                                <span class="caption-subject theme-font bold uppercase">Player chat</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div>
+                                <a href="#/" ng-click="logOut()">Logout</a> 
+                                <a> | </a>
+                                <a href ng-click="newGame()">New game</a>
+                                <a> | </a>
+                                <a>You are {{color}}</a>
+                                <a> | </a>
+                                <a>Player to move:</a>
+                                <input type="text" style="width:40px" ng-value="'white'" readonly disabled ng-if="turn=='w'"></input>
+                                <input type="text" style="width:40px" ng-value="'black'" readonly disabled ng-if="turn=='b'"></input>
+                                <a> | </a>
+                                <a href="#/rooms" ng-click="goToRooms()">Go to lobby</a>
+                        
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                </div>
+                <div class="col-md-6 col-sm-12">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                </div>
+                <div class="col-md-6 col-sm-6">
+                </div>
+            </div>
+            <!-- END PAGE CONTENT INNER -->
+        </div>
+    </div>
+    <!-- END PAGE CONTENT -->
+</div>
+<!-- END PAGE CONTAINER -->
+<!-- BEGIN FOOTER -->
+<div class="page-footer">
+    <div class="container">
+        2014 &copy; Metronic. All Rights Reserved.
+    </div>
+</div>
+<div class="scroll-to-top">
+    <i class="icon-arrow-up"></i>
+</div>
+
+
+
+
 
 
 
