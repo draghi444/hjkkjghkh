@@ -2,7 +2,7 @@
 
 
 angular.module('ChessMasterProApp')
-    .factory("chessRef", ["$firebaseArray", "$routeParams", 
+    .factory("chessRef", ["$firebaseArray", "$routeParams",
   function ($firebaseArray, $routeParams) {
 
             var roomId = $routeParams.roomid;
@@ -17,11 +17,11 @@ angular.module('ChessMasterProApp')
             $scope.$route = $route;
             $scope.$location = $location;
             $scope.$routeParams = $routeParams;
-            
-            
+
+
             var playRoomId = $routeParams.roomid;
-            
-            
+
+
 
             var chessRefForAuth = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/');
             var authData = chessRefForAuth.getAuth();
@@ -37,6 +37,7 @@ angular.module('ChessMasterProApp')
                     window.onresize = function () {
                         update();
                     }
+
                     function update() {
                         var canvasNode = document.getElementById('canvas0');
                         canvasNode.width = canvasNode.parentNode.clientWidth;
@@ -85,16 +86,16 @@ angular.module('ChessMasterProApp')
                         turn = snapshot.val();
                     });
                 }
-                
+
                 $scope.goToRooms = function () {
-                    
+
                     var deleteUserRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/users/' + authData.uid);
                     deleteUserRef.set({
                         uid: null
-                    });                        
+                    });
                 }
-                
-                
+
+
                 /////////////
 
 
@@ -116,14 +117,14 @@ angular.module('ChessMasterProApp')
 
                 Chess.SBOARD = [];
 
-                Chess.SBOARD[0] = ["wlt", "wlc", "wln", "wrm", "wrf", "wrn", "wrc", "wrt"];
+                Chess.SBOARD[0] = ["wlt", "wlc", "wln", "wrf", "wrm", "wrn", "wrc", "wrt"];
                 Chess.SBOARD[1] = ["wp1", "wp2", "wp3", "wp4", "wp5", "wp6", "wp7", "wp8"];
                 Chess.SBOARD[2] = [" ", " ", " ", " ", " ", " ", " ", " "];
                 Chess.SBOARD[3] = [" ", " ", " ", " ", " ", " ", " ", " "];
                 Chess.SBOARD[4] = [" ", " ", " ", " ", " ", " ", " ", " "];
                 Chess.SBOARD[5] = [" ", " ", " ", " ", " ", " ", " ", " "];
                 Chess.SBOARD[6] = ["bp1", "bp2", "bp3", "bp4", "bp5", "bp6", "bp7", "bp8"];
-                Chess.SBOARD[7] = ["blt", "blc", "bln", "brm", "brf", "brn", "brc", "brt"];
+                Chess.SBOARD[7] = ["blt", "blc", "bln", "brf", "brm", "brn", "brc", "brt"];
 
                 Chess.EBOARD = [];
                 Chess.EBOARD[0] = [" ", " ", " ", " ", " ", " ", " ", " "];
@@ -183,9 +184,66 @@ angular.module('ChessMasterProApp')
                             this.context.strokeRect(left, top, Chess.BLOCK_SIZE_PIXELS, Chess.BLOCK_SIZE_PIXELS);
                             this.context.font = "30px Arial";
                             this.context.fillStyle = colorValue == 'grey' ? 'white' : 'grey';
-                            this.context.fillText(this.board[y][x], (x * Chess.BLOCK_SIZE_PIXELS), ((y + 1) * Chess.BLOCK_SIZE_PIXELS));
+                            //this.context.fillText(this.board[y][x], (x * Chess.BLOCK_SIZE_PIXELS), ((y + 1) * Chess.BLOCK_SIZE_PIXELS));
+                            var xx = (x * Chess.BLOCK_SIZE_PIXELS);
+                            var yy = ((y + 1) * Chess.BLOCK_SIZE_PIXELS) - Chess.BLOCK_SIZE_PIXELS;
+                            var image;
+                            var aa = Chess.BLOCK_SIZE_PIXELS;
 
-
+                            if (this.board[y][x] == "blc" || this.board[y][x] == "brc") {
+                                image = '../images/svg/Chess_ndt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "brm") {
+                                image = '../images/svg/Chess_kdt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "brf") {
+                                image = '../images/svg/Chess_qdt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "bln" || this.board[y][x] == "brn") {
+                                image = '../images/svg/Chess_bdt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "blt" || this.board[y][x] == "brt") {
+                                image = '../images/svg/Chess_rdt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x].match(/bp.*/)) {
+                                image = '../images/svg/Chess_pdt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            
+                            
+                            if (this.board[y][x] == "wlt" || this.board[y][x] == "wrt") {
+                                image = '../images/svg/Chess_rlt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "wln" || this.board[y][x] == "wrn") {
+                                image = '../images/svg/Chess_blt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x].match(/wp.*/)) {
+                                image = '../images/svg/Chess_plt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "wlc" || this.board[y][x] == "wrc") {
+                                image = '../images/svg/Chess_nlt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "wlc" || this.board[y][x] == "wrc") {
+                                image = '../images/svg/Chess_nlt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "wrm") {
+                                image = '../images/svg/Chess_klt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
+                            if (this.board[y][x] == "wrf") {
+                                image = '../images/svg/Chess_qlt45.svg';
+                                chessFunctions.draw_image(this.context, xx, yy, image, aa);
+                            }
 
                         }
                     }
@@ -202,18 +260,18 @@ angular.module('ChessMasterProApp')
                 var attackPosX;
                 var attackPosY;
                 var color;
-console.log('room:' + playRoomId + ' ' + authData.uid);
-                
+                console.log('room:' + playRoomId + ' ' + authData.uid);
+
                 var ColorRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/users/' + authData.uid);
                 console.log('ColorRef:');
                 console.log(ColorRef);
-                
+
                 ColorRef.once('value', function (snapshot) {
                     console.log('color:');
                     console.log(snapshot.val());
                     color = snapshot.val().color;
                     $scope.color = color;
-                   // $scope.$apply();
+                    // $scope.$apply();
 
                 });
 

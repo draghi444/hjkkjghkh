@@ -5,11 +5,11 @@ angular.module('chessServices', []);
 angular.module('chessServices').factory('chessFunctions', ["$http", "$q",
         function ($http, $q) {
 
-        function draw_image(context, x, y, image) {
+        function draw_image(context, x, y, image, a) {
             var base_image = new Image();
-            base_image.src = image;
+            base_image.src = image;  
             base_image.onload = function () {
-                context.drawImage(base_image, x, y);
+                context.drawImage(base_image, x, y, a, a);
             }
         }
 
@@ -93,8 +93,8 @@ angular.module('chessServices').factory('chessFunctions', ["$http", "$q",
 
         return {
 
-            draw_image: function (context, x, y, image) {
-                return draw_image(context, x, y, image);
+            draw_image: function (context, x, y, image, a) {
+                return draw_image(context, x, y, image, a);
             },
 
             getBoardClickPosition: function (x, y, BOARD, l) {
