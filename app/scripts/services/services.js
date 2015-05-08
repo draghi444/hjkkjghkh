@@ -16,10 +16,6 @@ angular.module('chessServices').factory('chessFunctions', ["$http", "$q",
         function getBoardClickPosition(x, y, BOARD, l) {
             var xPos = x / l;
             var yPos = y / l;
-            console.log('services:');
-            console.log(l);
-            console.log(x);
-            console.log(y);
             return BOARD[yPos][xPos];
         }
 
@@ -41,6 +37,10 @@ angular.module('chessServices').factory('chessFunctions', ["$http", "$q",
 
             //pion//////
             if (attackPiece.match(/[a-z][0-9]/)) {
+                
+                
+                
+                
                 if (Math.abs(attackPosX - xClick) < 2 && Math.abs(attackPosY - yClick) < 2) {
                     return true;
                 }

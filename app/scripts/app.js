@@ -25,6 +25,10 @@ angular
             .when('/rooms', {
                 templateUrl: 'views/rooms/rooms.html',
                 controller: 'RoomsCtrl'
-            })
             
+            })
+            .otherwise({
+                redirectTo: '/'
+            });
+
     });

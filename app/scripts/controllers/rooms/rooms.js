@@ -5,11 +5,18 @@ angular.module('ChessMasterProApp')
     .controller('RoomsCtrl', ["$scope", "$rootScope", "$route", "$routeParams", "$location", "$firebaseObject",
         function ($scope, $rootScope, $route, $routeParams, $location, $firebaseObject) {
 
+
+            $scope.$route = $route;
+            $scope.$location = $location;
+            $scope.$routeParams = $routeParams;
+            
+            
             jQuery(document).ready(function () {
                 Metronic.init(); // init metronic core componets
                 Layout.init(); // init layout
                 Demo.init(); // init demo(theme settings page)
                 // Index.init(); // init index page
+               // $scope.$apply();
             });
 
 
@@ -19,7 +26,8 @@ angular.module('ChessMasterProApp')
             var authData = chessRefForAuth.getAuth();
 
             if (!chessRefForAuth.getAuth()) {
-                $location.path("/login");
+                console.log('rooms');
+                $location.path("/");
             } else {
 
                 var rooms = {};
@@ -67,7 +75,7 @@ angular.module('ChessMasterProApp')
                         }
 
 
-                         $location.path("/main");
+                         
 
 
                         roomsRef.child('/' + roomName + '/users').child(authData.uid).set({
@@ -77,6 +85,8 @@ angular.module('ChessMasterProApp')
                         });
 
                         // $scope.$apply();
+                        
+                        //$location.path("/main");
 
 
                     } else {

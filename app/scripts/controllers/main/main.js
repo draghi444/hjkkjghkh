@@ -1,6 +1,4 @@
-'use strict';
-
-
+//'use strict';
 angular.module('ChessMasterProApp')
     .factory("chessRef", ["$firebaseArray", "$routeParams",
   function ($firebaseArray, $routeParams) {
@@ -18,16 +16,39 @@ angular.module('ChessMasterProApp')
             $scope.$location = $location;
             $scope.$routeParams = $routeParams;
 
-
             var playRoomId = $routeParams.roomid;
-
-
 
             var chessRefForAuth = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/');
             var authData = chessRefForAuth.getAuth();
 
+            var ColorRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/users/' + authData.uid);
+            console.log('ColorRef:');
+            console.log(ColorRef);
+
+            ColorRef.on('value', function (snapshot) {
+                console.log('color:');
+                console.log(snapshot.val());
+                color = snapshot.val().color;
+                $scope.color = color;
+                $scope.$apply();
+
+            });
+
+
+
+
+            var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/turn');
+            turnRef.on('value', function (snapshot) {
+                turn = snapshot.val();
+                $scope.turn = turn;
+                $scope.$apply();
+            });
+
+            //check for fullscreen
+            $scope.fullScreenFlag = true;
+
             if (!chessRefForAuth.getAuth()) {
-                $location.path("/login");
+                $location.path("/");
                 // $scope.$apply();
             } else {
 
@@ -36,18 +57,34 @@ angular.module('ChessMasterProApp')
                 jQuery(document).ready(function () {
                     window.onresize = function () {
                         update();
+
                     }
 
                     function update() {
-                        var canvasNode = document.getElementById('canvas0');
-                        canvasNode.width = canvasNode.parentNode.clientWidth;
-                        canvasNode.height = canvasNode.width;
-                        resize = canvasNode.width;
-                        Chess.BLOCK_SIZE_PIXELS = Math.round(parseInt(resize) / 8);
-                        Chess.BOARD_HEIGHT_PIXELS = Chess.BOARD_HEIGHT * Chess.BLOCK_SIZE_PIXELS;
-                        Chess.BOARD_WIDTH_PIXELS = Chess.BOARD_WIDTH * Chess.BLOCK_SIZE_PIXELS;
-                        newBoard.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
+                        console.log($location.path().substring(0, 5));
+                        if ($location.path().substring(0, 5) == '/main') {
+                            console.log('update');
+
+                            var canvasNode = document.getElementById('canvas0');
+                            canvasNode.width = canvasNode.parentNode.clientWidth;
+                            canvasNode.height = canvasNode.width;
+                            resize = canvasNode.width;
+                            Chess.BLOCK_SIZE_PIXELS = Math.round(parseInt(resize) / 8);
+                            Chess.BOARD_HEIGHT_PIXELS = Chess.BOARD_HEIGHT * Chess.BLOCK_SIZE_PIXELS;
+                            Chess.BOARD_WIDTH_PIXELS = Chess.BOARD_WIDTH * Chess.BLOCK_SIZE_PIXELS;
+                            newBoard.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
+
+                            //check for fullscreen
+                            if (!window.screenTop && !window.screenY) {
+                                $scope.fullScreenFlag = true;
+                                $scope.$apply();
+                            } else {
+                                $scope.fullScreenFlag = false;
+                                $scope.$apply();
+                            }
+                        }
                     }
+
                     Metronic.init(); // init metronic core componets
                     Layout.init(); // init layout
                     Demo.init(); // init demo(theme settings page)
@@ -75,10 +112,15 @@ angular.module('ChessMasterProApp')
 
                 var turn;
                 $scope.newGame = function () {
+
+                    //  if (color == "white") {
                     newBoard.board = Chess.SBOARD;
+                    //   } else {
+                    //       newBoard.board = Chess.SBOARD;
+                    //   }
                     newBoard.writeToFirebase(chessRef);
 
-                    var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/turn');
+                    var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/turn');
                     turn = "w";
                     $scope.turn = turn;
                     turnRef.set(turn);
@@ -93,6 +135,8 @@ angular.module('ChessMasterProApp')
                     deleteUserRef.set({
                         uid: null
                     });
+                    $location.path("/rooms");
+                    // $scope.$apply();
                 }
 
 
@@ -116,8 +160,7 @@ angular.module('ChessMasterProApp')
                 }
 
                 Chess.SBOARD = [];
-
-                Chess.SBOARD[0] = ["wlt", "wlc", "wln", "wrf", "wrm", "wrn", "wrc", "wrt"];
+                Chess.SBOARD[0] = ["wrt", "wrc", "wrn", "wrf", "wrm", "wln", "wlc", "wlt"];
                 Chess.SBOARD[1] = ["wp1", "wp2", "wp3", "wp4", "wp5", "wp6", "wp7", "wp8"];
                 Chess.SBOARD[2] = [" ", " ", " ", " ", " ", " ", " ", " "];
                 Chess.SBOARD[3] = [" ", " ", " ", " ", " ", " ", " ", " "];
@@ -125,6 +168,16 @@ angular.module('ChessMasterProApp')
                 Chess.SBOARD[5] = [" ", " ", " ", " ", " ", " ", " ", " "];
                 Chess.SBOARD[6] = ["bp1", "bp2", "bp3", "bp4", "bp5", "bp6", "bp7", "bp8"];
                 Chess.SBOARD[7] = ["blt", "blc", "bln", "brf", "brm", "brn", "brc", "brt"];
+
+                Chess.JBOARD = [];
+                Chess.JBOARD[0] = ["blt", "blc", "bln", "brm", "brf", "brn", "brc", "brt"];
+                Chess.JBOARD[1] = ["bp1", "bp2", "bp3", "bp4", "bp5", "bp6", "bp7", "bp8"];
+                Chess.JBOARD[2] = [" ", " ", " ", " ", " ", " ", " ", " "];
+                Chess.JBOARD[3] = [" ", " ", " ", " ", " ", " ", " ", " "];
+                Chess.JBOARD[4] = [" ", " ", " ", " ", " ", " ", " ", " "];
+                Chess.JBOARD[5] = [" ", " ", " ", " ", " ", " ", " ", " "];
+                Chess.JBOARD[6] = ["wp1", "wp2", "wp3", "wp4", "wp5", "wp6", "wp7", "wp8"];
+                Chess.JBOARD[7] = ["wlt", "wlc", "wln", "wrm", "wrf", "wrn", "wrc", "wrt"];
 
                 Chess.EBOARD = [];
                 Chess.EBOARD[0] = [" ", " ", " ", " ", " ", " ", " ", " "];
@@ -190,6 +243,14 @@ angular.module('ChessMasterProApp')
                             var image;
                             var aa = Chess.BLOCK_SIZE_PIXELS;
 
+
+                            if (color == "white") {
+                                yy = (7 * Chess.BLOCK_SIZE_PIXELS) - yy;
+                                xx = (7 * Chess.BLOCK_SIZE_PIXELS) - xx;
+                            }
+
+                            console.log(this.board[x][y]);
+
                             if (this.board[y][x] == "blc" || this.board[y][x] == "brc") {
                                 image = '../images/svg/Chess_ndt45.svg';
                                 chessFunctions.draw_image(this.context, xx, yy, image, aa);
@@ -214,8 +275,8 @@ angular.module('ChessMasterProApp')
                                 image = '../images/svg/Chess_pdt45.svg';
                                 chessFunctions.draw_image(this.context, xx, yy, image, aa);
                             }
-                            
-                            
+
+
                             if (this.board[y][x] == "wlt" || this.board[y][x] == "wrt") {
                                 image = '../images/svg/Chess_rlt45.svg';
                                 chessFunctions.draw_image(this.context, xx, yy, image, aa);
@@ -253,7 +314,14 @@ angular.module('ChessMasterProApp')
 
                 var newBoard = new Chess.Board(Chess.EBOARD, canvas);
                 // newBoard.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
-                canvas.addEventListener('click', handleClick);
+                var newcontext = canvas.getContext('2d');
+                //if (color == "white") {
+                //    } else {
+                //        newcontext.translate(200,200);
+                //        newcontext.rotate(180 * Math.PI / 180);
+                //        newcontext.translate(-200,-200);
+                //    }
+
 
                 var activeClick = false;
                 var attackPiece;
@@ -262,34 +330,16 @@ angular.module('ChessMasterProApp')
                 var color;
                 console.log('room:' + playRoomId + ' ' + authData.uid);
 
-                var ColorRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/users/' + authData.uid);
-                console.log('ColorRef:');
-                console.log(ColorRef);
 
-                ColorRef.once('value', function (snapshot) {
-                    console.log('color:');
-                    console.log(snapshot.val());
-                    color = snapshot.val().color;
-                    $scope.color = color;
-                    // $scope.$apply();
 
-                });
-
-                var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/turn');
-                turnRef.once('value', function (snapshot) {
-                    turn = snapshot.val();
-                    $scope.turn = turn;
-                    $scope.$apply();
-                });
 
                 function handleClick(e) {
 
-                    //var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/turn');
-                    turnRef.once('value', function (snapshot) {
-                        turn = snapshot.val();
-                        $scope.turn = turn;
-                        $scope.$apply();
-                    });
+                    //    turnRef.once('value', function (snapshot) {
+                    //       turn = snapshot.val();
+                    //       $scope.turn = turn;
+                    //      $scope.$apply();
+                    //    });
 
                     if (authData) {
                         console.log("User " + authData.uid + " is logged in with " + authData.provider);
@@ -301,11 +351,35 @@ angular.module('ChessMasterProApp')
 
                     var x = Math.floor(e.offsetX / Chess.BLOCK_SIZE_PIXELS) * Chess.BLOCK_SIZE_PIXELS;
                     var y = Math.floor(e.offsetY / Chess.BLOCK_SIZE_PIXELS) * Chess.BLOCK_SIZE_PIXELS;
+                    var blueX = x;
+                    var blueY = y;
+                    console.log('x:' + x + 'y:' + y);
                     var xClick = x / Chess.BLOCK_SIZE_PIXELS;
                     var yClick = y / Chess.BLOCK_SIZE_PIXELS;
                     var textPiece = newBoard.board[yClick][xClick];
 
+
+                    if (color == "white") {
+                        console.log('white-click');
+                        xClick = 7 - xClick;
+                        yClick = 7 - yClick;
+                        
+                        x = xClick * Chess.BLOCK_SIZE_PIXELS;
+                        y = yClick * Chess.BLOCK_SIZE_PIXELS;
+                        console.log('x:' + x + 'y:' + y);
+                        textPiece = newBoard.board[yClick][xClick];
+                        console.log(chessFunctions.getBoardClickPosition(x, y, newBoard.board, Chess.BLOCK_SIZE_PIXELS));
+                        console.log('txtpiece:' + textPiece);
+
+                    }
+
+
+
+
+
+
                     if (Chess.clicks[yClick][xClick] == "1") {
+                        console.log('f1');
                         Chess.clicks[yClick][xClick] = "0";
                         activeClick = false;
                         attackPiece = null;
@@ -315,6 +389,7 @@ angular.module('ChessMasterProApp')
                         newBoard.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
                     } else {
                         if (activeClick) {
+                            console.log('f2');
 
                             var isAllowed = chessFunctions.moveAllowed(attackPiece, attackPosX, attackPosY, xClick, yClick, newBoard.board);
                             if (isAllowed) {
@@ -334,12 +409,17 @@ angular.module('ChessMasterProApp')
                                 turnRef.set(
                                     turn
                                 );
+                                $scope.$apply();
 
                             }
                         } else {
+                            console.log('f3');
 
                             if (chessFunctions.getBoardClickPosition(x, y, newBoard.board, Chess.BLOCK_SIZE_PIXELS) !== " ") {
+                                console.log('ok');
+                                console.log(String(textPiece)[0] + ' ' + turn + ' ' + String(color)[0]);
                                 if (String(textPiece)[0] == String(color)[0] && turn == String(color)[0]) {
+                                    console.log('ok2');
                                     activeClick = true;
                                     Chess.clicks[yClick][xClick] = "1";
                                     attackPiece = chessFunctions.getBoardClickPosition(x, y, newBoard.board, Chess.BLOCK_SIZE_PIXELS);
@@ -347,7 +427,8 @@ angular.module('ChessMasterProApp')
                                     attackPosY = yClick;
                                     c.globalAlpha = 0.2;
                                     c.fillStyle = "blue";
-                                    c.fillRect(x, y, Chess.BLOCK_SIZE_PIXELS, Chess.BLOCK_SIZE_PIXELS);
+                                    console.log('x:' + x + 'y:' + y);
+                                    c.fillRect(blueX, blueY, Chess.BLOCK_SIZE_PIXELS, Chess.BLOCK_SIZE_PIXELS);
                                     c.stroke();
                                 }
                             }
@@ -357,5 +438,45 @@ angular.module('ChessMasterProApp')
 
                     console.log('mutare:[' + xClick + '][' + yClick + '] click: ' + Chess.clicks[yClick][xClick] + ' attack-piece:' + attackPiece + ' attX:' + attackPosX + ' attY:' + attackPosY + '  piesa:' + chessFunctions.getBoardClickPosition(x, y, newBoard.board, Chess.BLOCK_SIZE_PIXELS));
                 }
+
+
+
+
+
+                canvas.addEventListener('click', handleClick);
+
+                //Chat controller
+                var chatRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/chat/');
+                $scope.user = authData.uid;
+                $scope.messages = $firebaseArray(chatRef);
+
+                $scope.addMessage = function () {
+                    $scope.messages.$add({
+                        from: $scope.user,
+                        content: $scope.message
+                    });
+                    $scope.message = "";
+                    $("#chatDiv")[0].scrollTop = $("#chatDiv")[0].scrollHeight;
+                };
+
+
+                $scope.eraseChat = function () {
+                    chatRef.remove();
+                };
+
+                $scope.messages.$loaded(function () {
+                    if ($scope.messages.length === 0) {
+                        $scope.messages.$add({
+                            from: "Chess Master",
+                            content: "Welcome! Good luck"
+                        });
+                    }
+                });
+
+
+
+
+
+
             }
                 }]);

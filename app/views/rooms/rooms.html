@@ -9,6 +9,37 @@
                     <img src="../../assets/admin/layout3/img/black-chess-icon.png" alt="logo" class="logo-default">     
                 </a>
             </div>
+            <a href="javascript:;" class="menu-toggler"></a>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+
+
+
+
+                    <!-- BEGIN USER LOGIN DROPDOWN -->
+                    <li class="dropdown dropdown-user dropdown-dark">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <img alt="" class="img-circle" src="../assets/admin/layout3/img/avatar9.jpg">
+                            <span class="username username-hide-mobile">Nick</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li class="divider">
+                            </li>
+                            <li>
+                                <a href="">
+                                    <i class="icon-lock"></i> Lock Screen</a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <i class="icon-key"></i> Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                </ul>
+            </div>
         </div>
     </div>
     <!-- END HEADER TOP -->
@@ -84,7 +115,8 @@
                                     <tbody ng-repeat="r in rooms">
                                         <tr>
                                             <td class="fit">
-                                                <img class="user-pic" src="../../assets/admin/layout3/img/avatar4.jpg">
+                                                <img ng-if="r.name == 'room1' " class="user-pic" src="../../assets/admin/layout3/img/disability_sign.gif">
+                                                <img ng-if="r.name == 'room2' " class="user-pic" src="../../assets/admin/layout3/img/handicap.svg.png">               
                                             </td>
                                             <td>
                                                 <p class="primary-link">{{r.name}}</p>
@@ -111,6 +143,23 @@
                     </div>
                     <!-- END PORTLET-->
                 </div>
+                <div class="col-md-6 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption caption-md">
+                                <i class="icon-bar-chart theme-font hide"></i>
+                                <span class="caption-subject theme-font bold uppercase">Create room</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div>
+                                <a href="#/" ng-click="logOut()">Logout</a> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
             </div>
             <!-- END PAGE CONTENT INNER -->
         </div>
@@ -121,7 +170,7 @@
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
     <div class="container">
-        2014 &copy; Metronic. All Rights Reserved.
+        2015 &copy; Chess Master Pro. All Rights Reserved.
     </div>
 </div>
 <div class="scroll-to-top">
