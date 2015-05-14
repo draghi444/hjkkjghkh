@@ -6,7 +6,7 @@
             <!-- BEGIN LOGO -->
             <div class="page-logo">
                 <a href="index.html">
-                    <img src="../../assets/admin/layout3/img/black-chess-icon.png" alt="logo" class="logo-default">     
+                    <img src="../../assets/admin/layout3/img/black-chess-icon.png" alt="logo" class="logo-default">
                 </a>
             </div>
         </div>
@@ -63,11 +63,8 @@
                         </div>
                         <div class="portlet-body">
                             <div class="container">
-
-
-
                                 <div class="row">
-                                    <label for="user" class="col-lg-1">Username</label>
+                                    <label for="user" class="col-lg-1">Email</label>
                                     <div class="col-lg-1">
                                         <input type="text" name="username" ng-model="credentials.username">
                                     </div>
@@ -80,21 +77,51 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-1 col-lg-offset-1">
-                                        <a href ng-click="logIn()">Log in</a>
+                                    <div class="col-lg-2 col-lg-offset-1" style="margin-top:3px">
+                                        <button style="color:#33CC66" ng-click="logIn()">Log in</button>
                                     </div>
                                 </div>
-
-
-
-
-
-
                             </div>
                         </div>
                     </div>
                     <!-- END PORTLET-->
                 </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption caption-md">
+                                <i class="icon-bar-chart theme-font hide"></i>
+                                <span class="caption-subject theme-font bold uppercase">Register</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="container">
+                                <div class="row">
+                                    <label for="user" class="col-lg-1">Email</label>
+                                    <div class="col-lg-1">
+                                        <input type="text" name="username" ng-model="credentials.username">
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top:3px">
+                                    <label for="pass" class="col-lg-1">Password</label>
+                                    <div class="col-lg-1">
+                                        <input type="password" name="password" id="password" ng-model="credentials.password">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-2 col-lg-offset-1" style="margin-top:3px">
+                                        <button style="color:#33CC66" ng-click="logIn()">Register</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+
             </div>
             <!-- END PAGE CONTENT INNER -->
         </div>

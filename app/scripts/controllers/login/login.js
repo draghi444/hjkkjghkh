@@ -33,7 +33,7 @@ jQuery(document).ready(function () {
                             console.log("Authenticated successfully with payload:", authData);
                             UsersRef.child("users").child(authData.uid).set({
                                 provider: authData.provider,
-                                name: authData.password.email.replace(/@.*/, ''),
+                                name: authData.password.email.replace(/@.*/, '')
                             });
                             
                             $location.path("/rooms");
