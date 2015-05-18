@@ -114,47 +114,54 @@
                         <div class="portlet-title">
                             <div class="caption caption-md">
                                 <i class="icon-bar-chart theme-font hide"></i>
-                                <span class="caption-subject theme-font bold uppercase">Controls</span>
+                                <span class="caption-subject theme-font bold uppercase">Console</span>
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <div>
-                                <a href="#/" ng-click="logOut()">Logout</a> 
-                                <a> | </a>
-                                <a href ng-click="newGame()">New game</a>
-                                <a> | </a>
-                                <a>You are {{color}}</a>
-                                <a> | </a>
-                                <a>Player to move:</a>
-                                <input type="text" style="width:40px" ng-value="'white'" readonly disabled ng-if="turn=='w'"></input>
-                                <input type="text" style="width:40px" ng-value="'black'" readonly disabled ng-if="turn=='b'"></input>
-                                <a> | </a>
-                                <a href="" ng-click="goToRooms()">Go to lobby</a>
+                            <div class="chat-form" style="border-radius: 5px; margin-top:0px;">
+                                <div class="input-cont col-sm-7" style="padding-left:0px; margin-right: 0px;">
+                                    <input ng-if="turn=='w'" class="form-control" type="text" placeholder="White's turn to move! You are {{color}}." readonly/>
+                                    <input ng-if="turn=='b'" class="form-control" type="text" placeholder="Black's turn to move! You are {{color}}." readonly/>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn default" ng-click="newGame()">New Game</button>
+                                    <button type="button" class="btn default" ng-click="goToRooms()">Lobby</button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="portlet-title" style="margin-top:45px">
+                        <div class="portlet-title" style="margin-top:15px">
                             <div class="caption caption-md">
                                 <i class="icon-bar-chart theme-font hide"></i>
-                                <span class="caption-subject theme-font bold uppercase">Player chat</span>
+                                <span class="caption-subject theme-font bold uppercase">Chat</span>
+                            </div>
+                            <div class="actions">
+                                <a class="btn btn-circle btn-icon-only btn-default" href="" ng-click="eraseChat()">
+
+                                    <img style="margin-bottom:5px; margin-left:1px; margin-top:1px;" alt="" class="img-circle" src="../assets/admin/layout3/img/delete-icon.png">
+                                </a>
                             </div>
                         </div>
 
                         <div class="portlet-body">
-                            <div style="max-height:175px; min-height:175px; background:#E8E8E8; border-radius: 5px; padding-bottom: 10px; padding-top: 5px;">
-                                <div id="chatDiv" style="max-height:170px; min-height:170px; overflow:auto; background:#E8E8E8; border-radius: 5px; padding-bottom: 10px; padding-top: 5px;">
-
+                            <div style="max-height:175px; min-height:175px; background:#e9eff3; border-radius: 5px; padding-bottom: 10px; padding-top: 5px;">
+                                <div id="chatDiv" style="max-height:170px; min-height:170px; overflow:auto; background:#e9eff3; border-radius: 5px; padding-bottom: 10px; padding-top: 5px;">
                                     <ul class="chatbox">
                                         <li ng-repeat="message in messages">{{ message.from }}: {{ message.content }}</li>
                                     </ul>
                                 </div>
                             </div>
-                            <div style="margin-top:5px">
-                                <form>
-                                    <input type="text" ng-model="message">
-                                    <button style="color:#33CC66" ng-click="addMessage()">Add Message</button>
-                                    <button style="color:#33CC66" ng-click="eraseChat()">Clear</button>
-                                </form>
+                            <div class="chat-form" style="border-radius: 5px; margin-top:5px;">
+                                <div class="input-cont">
+                                    <input class="form-control" type="text" placeholder="Type a message here..." ng-model="message" />
+                                </div>
+                                <div class="btn-cont">
+                                    <span class="arrow">
+										</span>
+                                    <a href="" class="btn blue icn-only" ng-click="addMessage()">
+                                        <i class="fa fa-check icon-white"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 

@@ -2,8 +2,8 @@
 
 
 angular.module('ChessMasterProApp')
-    .controller('RoomsCtrl', ["$scope", "$rootScope", "$route", "$routeParams", "$location", "$firebaseObject", "$timeout",
-        function ($scope, $rootScope, $route, $routeParams, $location, $firebaseObject, $timeout) {
+    .controller('RoomsCtrl', ["$scope", "$rootScope", "$route", "$routeParams", "$location", "$firebaseObject", "$timeout", "$firebaseAuth",
+        function ($scope, $rootScope, $route, $routeParams, $location, $firebaseObject, $timeout, $firebaseAuth) {
 
 
             $scope.$route = $route;
@@ -142,28 +142,28 @@ angular.module('ChessMasterProApp')
                 }
 
                 $scope.joinIn = function (roomName) {
-                    var color;
-                    if (rooms[roomName].number < 2) {
-                        if (rooms[roomName].number == 0) {
-                            color = "white";
-                        } else {
-                            for (var i in rooms[roomName].users) {
-                                color = rooms[roomName].users[i].color;
-                            }
-                            if (color == "white") {
-                                color = "black";
-                            } else {
+                        var color;
+                        if (rooms[roomName].number < 2) {
+                            if (rooms[roomName].number == 0) {
                                 color = "white";
+                            } else {
+                                for (var i in rooms[roomName].users) {
+                                    color = rooms[roomName].users[i].color;
+                                }
+                                if (color == "white") {
+                                    color = "black";
+                                } else {
+                                    color = "white";
+                                }
                             }
-                        }
 
-                        roomsRef.child('/' + roomName + '/users').child(authData.uid).set({
-                            provider: authData.provider,
-                            name: authData.password.email.replace(/@.*/, ''),
-                            color: color
-                        });
-                        //$location.path("/main");
-                    }
+                            roomsRef.child('/' + roomName + '/users').child(authData.uid).set({
+                                provider: authData.provider,
+                                name: authData.password.email.replace(/@.*/, ''),
+                                color: color
+                            });
+                            //$location.path("/main");
+                        }
                 }
 
 

@@ -5,7 +5,7 @@
         <div class="container">
             <!-- BEGIN LOGO -->
             <div class="page-logo">
-                <a href="index.html">
+                <a href="index.html" ng-if="fullScreenFlag">
                     <img src="../../assets/admin/layout3/img/black-chess-icon.png" alt="logo" class="logo-default">
                 </a>
             </div>
@@ -62,23 +62,32 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <div class="container">
-                                <div class="row">
-                                    <label for="user" class="col-lg-1">Email</label>
-                                    <div class="col-lg-1">
-                                        <input type="text" name="username" ng-model="credentials.username">
+                            <form class="form-horizontal">
+                                <div class="form-body">
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label class="col-md-3 control-label">Email</label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+															<i class="fa fa-envelope"></i>
+															</span>
+                                                <input type="email" class="form-control" placeholder="Email Address" ng-model="credentials.username">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="row" style="margin-top:3px">
-                                    <label for="pass" class="col-lg-1">Password</label>
-                                    <div class="col-lg-1">
-                                        <input type="password" name="password" id="password" ng-model="credentials.password">
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label class="col-md-3 control-label">Password</label>
+                                        <div class="col-md-6">
+                                            <input type="password" class="form-control" placeholder="Password" ng-model="credentials.password">
+                                        </div>
                                     </div>
-                                </div>
+                            </form>
+                            </div>
+                            <div class="form-actions fluid">
                                 <div class="row">
-                                    <div class="col-lg-2 col-lg-offset-1" style="margin-top:3px">
-                                        <button style="color:#33CC66" ng-click="logIn()">Log in</button>
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" class="btn green" ng-click="logIn()">Log in</button>
+                                        <button type="button" class="btn default" ng-click="openRegistration()">Register</button>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +96,7 @@
                     <!-- END PORTLET-->
                 </div>
 
-                <div class="col-md-6 col-sm-12">
+                <div class="col-md-6 col-sm-12" ng-if="openRegistrationFlag">
                     <!-- BEGIN PORTLET-->
                     <div class="portlet light ">
                         <div class="portlet-title">
@@ -97,47 +106,61 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <div class="container">
-                                <div class="row">
-                                    <label for="user" class="col-lg-1">Email</label>
-                                    <div class="col-lg-1">
-                                        <input type="text" name="username" ng-model="credentials.username">
+                            <form class="form-horizontal">
+                                <div class="form-body">
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label class="col-md-3 control-label">Email</label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+															<i class="fa fa-envelope"></i>
+															</span>
+                                                <input type="email" class="form-control" placeholder="Email Address" ng-model="registerCredentials.username">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="row" style="margin-top:3px">
-                                    <label for="pass" class="col-lg-1">Password</label>
-                                    <div class="col-lg-1">
-                                        <input type="password" name="password" id="password" ng-model="credentials.password">
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label class="col-md-3 control-label">Password</label>
+                                        <div class="col-md-6">
+                                            <input type="password" class="form-control" placeholder="Password" ng-model="registerCredentials.password">
+                                        </div>
                                     </div>
-                                </div>
+                            </form>
+                            </div>
+                            <div class="form-actions fluid">
                                 <div class="row">
-                                    <div class="col-lg-2 col-lg-offset-1" style="margin-top:3px">
-                                        <button style="color:#33CC66" ng-click="logIn()">Register</button>
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" class="btn green" ng-click="registerUser()">Register</button>
+                                        <button type="button" class="btn default" ng-click="cancelRegistration()" >Cancel</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- END PORTLET-->
                     </div>
-                    <!-- END PORTLET-->
+
                 </div>
+                <!-- END PAGE CONTENT INNER -->
+
+
+
+
+
 
             </div>
-            <!-- END PAGE CONTENT INNER -->
+        </div>
+        <!-- END PAGE CONTENT -->
+    </div>
+    <!-- END PAGE CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    <div class="page-footer">
+        <div class="container">
+            2015 &copy; Chess Master Pro. All Rights Reserved.
         </div>
     </div>
-    <!-- END PAGE CONTENT -->
-</div>
-<!-- END PAGE CONTAINER -->
-<!-- BEGIN FOOTER -->
-<div class="page-footer">
-    <div class="container">
-        2015 &copy; Chess Master Pro. All Rights Reserved.
+    <div class="scroll-to-top">
+        <i class="icon-arrow-up"></i>
     </div>
-</div>
-<div class="scroll-to-top">
-    <i class="icon-arrow-up"></i>
-</div>
 
 
 
