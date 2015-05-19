@@ -30,12 +30,12 @@ angular.module('ChessMasterProApp')
                 username: "",
                 password: ""
             }
-            
+
             var registerCredentials = $scope.registerCredentials = {
                 username: "",
                 password: ""
             }
-            
+
 
             $scope.$route = $route;
             $scope.$location = $location;
@@ -49,13 +49,9 @@ angular.module('ChessMasterProApp')
                 }, function (error, authData) {
                     if (error) {
                         console.log("Login Failed!", error);
+                        alert("Login Failed!");
                     } else {
                         console.log("Authenticated successfully with payload:", authData);
-                        UsersRef.child("users").child(authData.uid).set({
-                            provider: authData.provider,
-                            name: authData.password.email.replace(/@.*/, '')
-                        });
-
                         $location.path("/rooms");
                         $scope.$apply();
                     }
@@ -65,20 +61,20 @@ angular.module('ChessMasterProApp')
 
             }
 
-            
+
             $scope.openRegistrationFlag = false;
             $scope.openRegistration = function () {
-                $scope.openRegistrationFlag = true;  
+                $scope.openRegistrationFlag = true;
             }
-            
+
             $scope.cancelRegistration = function () {
-                $scope.openRegistrationFlag = false;  
+                $scope.openRegistrationFlag = false;
             }
-            
-            
-            
-            
-            
+
+
+
+
+
 
             $scope.registerUser = function () {
                 UsersRef.createUser({
@@ -99,24 +95,28 @@ angular.module('ChessMasterProApp')
                     } else {
                         console.log("Successfully created user account with uid:", userData.uid);
                         UsersRef.authWithPassword({
-                    email: $scope.registerCredentials.username,
-                    password: $scope.registerCredentials.password
-                }, function (error, authData) {
-                    if (error) {
-                        console.log("Login Failed!", error);
-                    } else {
-                        console.log("Authenticated successfully with payload:", authData);
-                        UsersRef.child("users").child(authData.uid).set({
-                            provider: authData.provider,
-                            name: authData.password.email.replace(/@.*/, '')
+                            email: $scope.registerCredentials.username,
+                            password: $scope.registerCredentials.password
+                        }, function (error, authData) {
+                            if (error) {
+                                console.log("Login Failed!", error);
+                            } else {
+                                console.log("Authenticated successfully with payload:", authData);
+                                UsersRef.child("users").child(authData.uid).set({
+                                    provider: authData.provider,
+                                    name: authData.password.email.replace(/@.*/, ''),
+                                    statistics: {
+                                        gamesTotal: 0,
+                                        gamesWon: 0,
+                                        nickname: authData.password.email.replace(/@.*/, '')
+                                    }
+                                });
+                                $location.path("/rooms");
+                                $scope.$apply();
+                            }
+                        }, {
+                            remember: "sessionOnly"
                         });
-
-                        $location.path("/rooms");
-                        $scope.$apply();
-                    }
-                }, {
-                    remember: "sessionOnly"
-                });
                     }
                 });
             }

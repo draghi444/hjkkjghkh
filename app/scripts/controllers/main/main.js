@@ -1,35 +1,39 @@
 //'use strict';
 angular.module('ChessMasterProApp')
-    .factory("chessRef", ["$firebaseArray", "$routeParams",
+    .factory("chessReff", ["$firebaseArray", "$routeParams",
   function ($firebaseArray, $routeParams) {
 
             var roomId = $routeParams.roomid;
-            var chessRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + roomId + '/');
+            var chessReff = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + roomId + '/');
             // var chessController = new Chess.Controller(chessRef);
-            return chessRef;
+            return chessReff;
   }
 ])
-    .controller('MainCtrl', ["$scope", "$firebaseObject", "$firebaseArray", "chessRef", "chessFunctions", "$timeout", "$route", "$routeParams", "$location", "$firebaseAuth",
-        function ($scope, $firebaseObject, $firebaseArray, chessRef, chessFunctions, $timeout, $route, $routeParams, $location, $firebaseAuth) {
+    .controller('MainCtrl', ["$scope", "$firebaseObject", "$firebaseArray", "chessReff", "chessFunctions", "$timeout", "$route", "$routeParams", "$location", "$firebaseAuth",
+        function ($scope, $firebaseObject, $firebaseArray, chessReff, chessFunctions, $timeout, $route, $routeParams, $location, $firebaseAuth) {
 
             $scope.$route = $route;
             $scope.$location = $location;
             $scope.$routeParams = $routeParams;
 
 
-            var chessRefForAuth = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/');
+            //var chessRefForAuth = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/');
+            var chessRefForAuth = new Firebase('https://burning-heat-7639.firebaseio.com/');
             var authData = chessRefForAuth.getAuth();
 
             if (!chessRefForAuth.getAuth()) {
                 $location.path("/");
                 // $scope.$apply();
             } else {
-                var gameover = "0";
+                var gameover = $scope.gameover;
+                var gameLooser = '';
                 $scope.username = authData.password.email.replace(/@.*/, '');
                 $scope.fullScreenFlag = true;
                 var playRoomId = $routeParams.roomid;
+                $scope.playRoomId = playRoomId;
                 var turn;
 
+                var chessRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/');
 
                 /*
                 def1 = $.Deferred();
@@ -64,9 +68,34 @@ angular.module('ChessMasterProApp')
                     console.log(snapshot.val());
                     color = snapshot.val().color;
                     $scope.color = color;
-                     $timeout(function () {
-                            $scope.$apply();
-                        }, 0);
+                    $timeout(function () {
+                        $scope.$apply();
+                    }, 0);
+                });
+
+                var gameOverRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/gameover');
+                gameOverRef.on('value', function (snapshot) {
+                    console.log('GET GAMEOVER');
+                    console.log(snapshot.val());
+                    console.log(turn);
+                    gameover = snapshot.val();
+                    $scope.gameover = gameover;
+                    $timeout(function () {
+                        $scope.$apply();
+                    }, 0);
+                });
+                
+                var statisticsRef = new Firebase('https://burning-heat-7639.firebaseio.com/users/' + authData.uid + '/statistics');
+                statisticsRef.once('value', function (snapshot) {
+                    $scope.username = snapshot.val().nickname;
+                    $scope.gamesTotal = snapshot.val().gamesTotal;
+                    $scope.gamesWon = snapshot.val().gamesWon;
+                    if($scope.gamesTotal != 0) {
+                    $scope.rank = Math.floor(($scope.gamesWon/$scope.gamesTotal) * 10);
+                    } else { $scope.rank = 0; }
+                    $timeout(function () {
+                        $scope.$apply();
+                    }, 0);
                 });
 
 
@@ -78,10 +107,10 @@ angular.module('ChessMasterProApp')
                 Chess.BOARD_HEIGHT_PIXELS = Chess.BOARD_HEIGHT * Chess.BLOCK_SIZE_PIXELS;
                 Chess.BOARD_WIDTH_PIXELS = Chess.BOARD_WIDTH * Chess.BLOCK_SIZE_PIXELS;
                 Chess.BLOCK_BORDER_COLOR = "#484848";
-                
-                
-                
-                
+
+
+
+
 
                 //var canvas = $("#canvas0").get(0);
                 Chess.Board = function (BOARD, canvas) {
@@ -93,7 +122,12 @@ angular.module('ChessMasterProApp')
                     // self.draw(0, Chess.BOARD_WIDTH, 0, Chess.BOARD_HEIGHT);
 
 
+                    console.log('EROARE:');
+                    console.log(chessRef);
+                    
                     chessRef.child('/board').on('value', function (snap) {
+                        console.log('EROARE2:');
+                    console.log(chessRef);
                         console.log('value');
                         self.board = snap.val().board;
                         console.log(self.board[0]);
@@ -111,26 +145,62 @@ angular.module('ChessMasterProApp')
 
 
                         var countKings = 0;
+                        var whiteKing = false;
+                        var blackKing = false;
                         for (var i = 0; i < 8; i++) {
                             for (var j = 0; j < 8; j++) {
                                 if (self.board[i][j].match(/[a-z]m/)) {
                                     countKings++;
-                                    console.log('un king');
+                                    if (self.board[i][j].match(/w[a-z]m/)) {
+                                        whiteKing = true;
+                                    }
+                                    if (self.board[i][j].match(/b[a-z]m/)) {
+                                        blackKing = true;
+                                    }
+
                                 }
                             }
                         }
                         if (countKings != 2) {
-                            console.log('GAME OVER');
-                            gameover = "1";
+                            console.log('GAME OVER ' + turn);
+                            console.log('GAME OVER ' + color);
+                            gameover = true;
+                            gameOverRef.set(gameover);
+                            if (!whiteKing) {
+                                gameLooser = "w";
+                            }
+                            if (!blackKing) {
+                                gameLooser = "b";
+                            }
+
+
+                            var statisticsRef = new Firebase('https://burning-heat-7639.firebaseio.com/users/' + authData.uid);
+                            if (typeof turn !== 'undefined') {
+                                statisticsRef.child("statistics/gamesTotal").transaction(function (currentValue) {
+                                    return (currentValue || 0) + 1;
+                                });
+                                statisticsRef.child("statistics/gamesWon").transaction(function (currentValue) {
+                                    return (currentValue || 0) + 0;
+                                });
+
+                                if (color[0] !== gameLooser) {
+                                    statisticsRef.child("statistics/gamesWon").transaction(function (currentValue) {
+                                        return (currentValue || 0) + 1;
+                                    });
+                                }
+                            }
+
+
                         } else {
-                            console.log('PLAY' + color);
+                            console.log('PLAY' + turn);
                         }
+                        console.log('LOOSER: ' + gameLooser);
 
                     });
                 };
 
-                
-                
+
+
                 Chess.Board.prototype.draw = function (a, b, c, d) {
                     this.context.clearRect(0, 0, Chess.BOARD_WIDTH_PIXELS, Chess.BOARD_HEIGHT_PIXELS);
                     for (var x = a; x < b; x++) {
@@ -331,8 +401,11 @@ angular.module('ChessMasterProApp')
 
                 $scope.newGame = function () {
                     newBoard.board = Chess.SBOARD;
-                    gameover = "0";
+                    gameover = false;
                     newBoard.writeToFirebase(chessRef);
+                    var gameOverRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/gameover');
+                    console.log(gameover);
+                    gameOverRef.set(gameover);
 
 
                     var turnRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms/' + playRoomId + '/turn');
@@ -352,7 +425,7 @@ angular.module('ChessMasterProApp')
 
                 //Chess.BOARD_WIDTH = 8;
                 //Chess.BOARD_HEIGHT = 8;
-/*
+                /*
                 Chess.BLOCK_SIZE_PIXELS = 50;
                 Chess.BOARD_HEIGHT_PIXELS = Chess.BOARD_HEIGHT * Chess.BLOCK_SIZE_PIXELS;
                 Chess.BOARD_WIDTH_PIXELS = Chess.BOARD_WIDTH * Chess.BLOCK_SIZE_PIXELS;
@@ -460,7 +533,7 @@ angular.module('ChessMasterProApp')
                     var yClick = y / Chess.BLOCK_SIZE_PIXELS;
                     var textPiece = newBoard.board[yClick][xClick];
 
-console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY: ' + color);
+                    console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY: ' + color);
                     if (color == "white") {
                         console.log('white-click');
                         xClick = 7 - xClick;
@@ -478,7 +551,7 @@ console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY: ' + color);
 
 
 
-                    if (gameover != "1") {
+                    if (!gameover) {
 
                         if (Chess.clicks[yClick][xClick] == "1") {
                             console.log('f1');
@@ -560,7 +633,7 @@ console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY: ' + color);
 
                 $scope.addMessage = function () {
                     $scope.messages.$add({
-                        from: $scope.user,
+                        from: $scope.username,
                         content: $scope.message
                     });
                     $scope.message = "";

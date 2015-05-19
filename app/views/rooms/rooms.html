@@ -17,15 +17,15 @@
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user dropdown-dark">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <img alt="" class="img-circle" src="../assets/admin/layout3/img/user.png">
+                            <img alt="" class="img-circle" src="../assets/admin/layout3/img/User-Profile-Icon.png">
                             <span class="username username-hide-mobile">{{username}}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
                             <li class="divider">
                             </li>
                             <li>
-                                <a href="">
-                                    <i class="icon-lock"></i>Lock Screen</a>
+                                <a href="#/preferences/rooms">
+                                    <i class="icon-lock"></i>Preferences</a>
                             </li>
                             <li>
                                 <a href="#/" ng-click="logOutRooms()">
@@ -126,13 +126,23 @@
                                                 <p class="primary-link">{{r.number}}</p>
                                             </td>
                                             <td>
-                                                <ul style="list-style-type: none; padding:0; margin:0;" ng-repeat="u in r.users">
-                                                    <li class="primary-link">{{u.name}}</li>
-                                                </ul>
-                                                <ul style="list-style-type: none; padding:0; margin:0;" ng-if="!r.users">
-                                                    <li class="primary-link">empty</li>
-                                                </ul>
-
+                                                <div class="btn-group">
+                                                    <ul style="list-style-type: none; padding:0; margin:0;" ng-repeat="u in r.users">
+                                                        <li class="primary-link">
+                                                            <a href="" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" ng-click="getUserStats(u.name)">
+										{{u.nickname}} <span class="fa fa-angle-down">
+										</span>
+										</a>
+                                                            <ul class="dropdown-menu pull-right" style="top:30;">
+                                                                <li>
+                                                                    <a style="color:blue;"><b>Rank:{{rank}} | Wins:{{gamesWon}}</b></a>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                    <ul style="list-style-type: none; padding:0; margin:0;" ng-if="!r.users">
+                                                        <li class="primary-link">empty</li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                             <td>
                                                 <a ng-if="r.number < 2" href="{{'#/main/' + r.name}}" style="color:#33CC66" ng-click="joinIn(r.name)" class="primary-link">Join room</a>

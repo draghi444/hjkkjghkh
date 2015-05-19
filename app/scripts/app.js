@@ -25,7 +25,10 @@ angular
             .when('/rooms', {
                 templateUrl: 'views/rooms/rooms.html',
                 controller: 'RoomsCtrl'
-            
+            })
+            .when('/preferences/:fromLocation', {
+                templateUrl: 'views/preferences/preferences.html',
+                controller: 'PrefCtrl'
             })
             .otherwise({
                 redirectTo: '/'

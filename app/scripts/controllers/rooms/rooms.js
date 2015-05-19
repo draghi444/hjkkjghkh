@@ -31,7 +31,6 @@ angular.module('ChessMasterProApp')
             } else {
 
                 $scope.fullScreenFlag = true;
-                $scope.username = authData.password.email.replace(/@.*/, '');
                 var rooms = {};
                 var roomsRef = new Firebase('https://burning-heat-7639.firebaseio.com/rooms');
                 var roomsList = [];
@@ -49,6 +48,23 @@ angular.module('ChessMasterProApp')
 
                 }
 
+                var statisticsRef = new Firebase('https://burning-heat-7639.firebaseio.com/users/' + authData.uid + '/statistics');
+                statisticsRef.once('value', function (snapshot) {
+                    $scope.username = snapshot.val().nickname;
+                    $scope.gamesTotal = snapshot.val().gamesTotal;
+                    $scope.gamesWon = snapshot.val().gamesWon;
+                    if ($scope.gamesTotal != 0) {
+                        $scope.rank = Math.floor(($scope.gamesWon / $scope.gamesTotal) * 10);
+                    } else {
+                        $scope.rank = 0;
+                    }
+
+
+                    $timeout(function () {
+                        $scope.$apply();
+                    }, 0);
+                });
+
 
                 roomsRef.once('value', function (snapshot) {
                     snapshot.forEach(function (data) {
@@ -61,6 +77,7 @@ angular.module('ChessMasterProApp')
                     });
                     $timeout(function () {
                         $scope.rooms = rooms;
+
                         $scope.$apply();
                     }, 0);
                 });
@@ -142,28 +159,29 @@ angular.module('ChessMasterProApp')
                 }
 
                 $scope.joinIn = function (roomName) {
-                        var color;
-                        if (rooms[roomName].number < 2) {
-                            if (rooms[roomName].number == 0) {
-                                color = "white";
-                            } else {
-                                for (var i in rooms[roomName].users) {
-                                    color = rooms[roomName].users[i].color;
-                                }
-                                if (color == "white") {
-                                    color = "black";
-                                } else {
-                                    color = "white";
-                                }
+                    var color;
+                    if (rooms[roomName].number < 2) {
+                        if (rooms[roomName].number == 0) {
+                            color = "white";
+                        } else {
+                            for (var i in rooms[roomName].users) {
+                                color = rooms[roomName].users[i].color;
                             }
-
-                            roomsRef.child('/' + roomName + '/users').child(authData.uid).set({
-                                provider: authData.provider,
-                                name: authData.password.email.replace(/@.*/, ''),
-                                color: color
-                            });
-                            //$location.path("/main");
+                            if (color == "white") {
+                                color = "black";
+                            } else {
+                                color = "white";
+                            }
                         }
+
+                        roomsRef.child('/' + roomName + '/users').child(authData.uid).set({
+                            provider: authData.provider,
+                            name: authData.password.email.replace(/@.*/, ''),
+                            color: color,
+                            nickname: $scope.username
+                        });
+                        //$location.path("/main");
+                    }
                 }
 
 
@@ -186,6 +204,37 @@ angular.module('ChessMasterProApp')
                             $scope.$apply();
                         }, 0);
                     });
+                }
+
+
+                $scope.getUserStats = function (name) {
+                    var usersRef = new Firebase('https://burning-heat-7639.firebaseio.com/users');
+                    usersRef.once('value', function (snapshot) {
+                        snapshot.forEach(function (data) {
+                            console.log('BBBBBBBBBBBBB:');
+                            console.log(data.key());
+                            console.log(data.val().statistics.gamesTotal);
+                            if (data.val().name == name) {
+                                $scope.gamesTotal = data.val().statistics.gamesTotal;
+                                $scope.gamesWon = data.val().statistics.gamesWon;
+                                if ($scope.gamesTotal != 0) {
+                                    $scope.rank = Math.floor(($scope.gamesWon / $scope.gamesTotal) * 10);
+                                } else {
+                                    $scope.rank = 0;
+                                }
+
+
+                            }
+
+
+                        });
+                        $timeout(function () {
+                            //  $scope.rooms = rooms;
+
+                            //  $scope.$apply();
+                        }, 0);
+                    });
+
                 }
 
             }

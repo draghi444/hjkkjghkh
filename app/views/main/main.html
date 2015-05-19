@@ -23,14 +23,14 @@
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user dropdown-dark">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <img alt="" class="img-circle" src="../assets/admin/layout3/img/user.png">
+                            <img alt="" class="img-circle" src="../assets/admin/layout3/img/User-Profile-Icon.png">
                             <span class="username username-hide-mobile">{{username}}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
                             <li class="divider">
                             </li>
                             <li>
-                                <a href="#/rooms">
+                                <a href="{{'#/preferences/main+' + playRoomId}}">
                                     <i class="icon-lock"></i>Preferences</a>
                             </li>
                             <li>
@@ -120,11 +120,13 @@
                         <div class="portlet-body">
                             <div class="chat-form" style="border-radius: 5px; margin-top:0px;">
                                 <div class="input-cont col-sm-7" style="padding-left:0px; margin-right: 0px;">
-                                    <input ng-if="turn=='w'" class="form-control" type="text" placeholder="White's turn to move! You are {{color}}." readonly/>
-                                    <input ng-if="turn=='b'" class="form-control" type="text" placeholder="Black's turn to move! You are {{color}}." readonly/>
+                                    <input ng-if="turn=='w' && !gameover" class="form-control" type="text" placeholder="White's turn to move! You are {{color}}." readonly/>
+                                    <input ng-if="turn=='b' && !gameover" class="form-control" type="text" placeholder="Black's turn to move! You are {{color}}." readonly/>
+                                    <input ng-if="turn=='w' && gameover" class="form-control" type="text" placeholder="Black wins!!!" readonly/>
+                                    <input ng-if="turn=='b' && gameover" class="form-control" type="text" placeholder="White wins!!!" readonly/>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn default" ng-click="newGame()">New Game</button>
+                                    <button type="submit" class="btn green" ng-click="newGame()">New Game</button>
                                     <button type="button" class="btn default" ng-click="goToRooms()">Lobby</button>
                                 </div>
                             </div>
@@ -138,7 +140,7 @@
                             <div class="actions">
                                 <a class="btn btn-circle btn-icon-only btn-default" href="" ng-click="eraseChat()">
 
-                                    <img style="margin-bottom:5px; margin-left:1px; margin-top:1px;" alt="" class="img-circle" src="../assets/admin/layout3/img/delete-icon.png">
+                                    <img style="margin-bottom:5px; margin-left:1px" alt="" class="img-circle" src="../assets/admin/layout3/img/refresh3.png">
                                 </a>
                             </div>
                         </div>
